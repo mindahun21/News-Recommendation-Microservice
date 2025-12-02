@@ -162,7 +162,7 @@ git checkout back
 
 ## 📁 Project Structure (Back Branch)
 
-text
+```text
 
 back/
 ├── user-service/
@@ -175,3 +175,5 @@ back/
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
+
+```
