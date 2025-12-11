@@ -55,4 +55,7 @@ public class JwtService {
                 .getBody().getSubject();
 
     }
+    public Integer getExpiration(){
+        return (int)jwTconfig.getExpiration();
+    }
 }
