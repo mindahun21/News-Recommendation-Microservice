@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    username: pguser
+    password: pgpassword
+    url: jdbc:postgresql://localhost:5499/auth
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
+  jwt:
+    secret: ${jwt_secret}
+    expiration: 2_592_000_000 #30Days
+    accessExpiration: 3_600_000 # 1 hour
+  cloud:
+    gateway:
+      enabled: true
+      routes:
+        - id : NEWS-SERVICE
+          uri: http://localhost:8888
+          predicates:
+            - /news/**
