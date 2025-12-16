@@ -1,5 +1,6 @@
 # News Recommendation Microservice Platform
 
+
 ## Project Overview
 
 This is a distributed microservice platform for personalized news delivery, consisting of independent services that communicate via events and APIs. The system provides personalized news recommendations, user management, content ingestion, analytics, and notifications.
