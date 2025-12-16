@@ -44,7 +44,6 @@ public AuthenticationManager  authenticationManager(
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(
                                 "/auth/**",
                                 "/swagger-ui/**",
