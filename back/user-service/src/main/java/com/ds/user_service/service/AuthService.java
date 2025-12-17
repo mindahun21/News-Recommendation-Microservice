@@ -17,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
@@ -25,23 +26,23 @@ import java.util.Map;
 public class AuthService {
     private final JwtService  jwtService;
     private final UserRepository repository;
-    private final UserMapper mapper;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
-    public  UserResponse createUser(UserRequest user) {
-        if(repository.existsById(user.username()))
-            throw new UserAlreadyExistsException(String.format("A user with the username: %s already exists",user.username()));
-        return mapper
-                .toUserResponse(
-                        repository.save(
-                                mapper.toUser(
-                                        user.username(),
-                                        passwordEncoder.encode(user.password())
-                                ))
+    public  Mono<UserResponse> createUser(UserRequest user) {
+        repository.existsById(user.username())
+                .map(
+                        exists-> exists?
+                                Mono.empty():
+                                Mono.error(new UserAlreadyExistsException(String.format("A user with the username: %s already exists",user.username())))
                 );
+        return repository.save(
+                UserMapper.toUser(user.username(),passwordEncoder.encode(user.password()))
+        ).map(UserMapper::toUserResponse);
     }
-
+    public Mono<User> findUserByUsername(String username) {
+        return repository.findById(username);
+    }
     public Map<String, String> refreshAccessToken(String refreshToken) {
         var username=jwtService.getUserName(refreshToken);
         return Map.of("token",jwtService.generateToken(username));

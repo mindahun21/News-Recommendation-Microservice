@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class UserMapper {
-    public User toUser(UserRequest userRequest){
+    public static User toUser(UserRequest userRequest){
         return User
                 .builder()
                 .username(userRequest.username())
@@ -16,7 +15,7 @@ public class UserMapper {
                 .role(List.of())
                 .build();
     }
-    public User toUser(String username,String password){
+    public static User toUser(String username,String password){
         return User
                 .builder()
                 .username(username)
@@ -24,7 +23,7 @@ public class UserMapper {
                 .role(List.of())
                 .build();
     }
-    public UserResponse toUserResponse(User user){
+    public static UserResponse toUserResponse(User user){
         return new UserResponse(
                 user.getUsername(),
                 user.getRole()
