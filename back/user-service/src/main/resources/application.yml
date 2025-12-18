@@ -1,24 +1,20 @@
 spring:
   application:
     name: user-service
-  datasource:
+  r2dbc:
     username: pguser
     password: pgpassword
-    url: jdbc:postgresql://localhost:5499/auth
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    url: r2dbc:postgresql://localhost:5499/auth
   flyway:
     baseline-on-migrate: true
     enabled: true
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    url: ${spring.datasource.url}
+    user: ${spring.r2dbc.username}
+    password: ${spring.r2dbc.password}
+    url: jdbc:postgresql://localhost:5499/auth
   jwt:
     secret: ${jwt_secret}
     expiration: 2_592_000_000 #30Days
-    accessExpiration: 3_600_000 # 1 hour
+    jwt-access-expiration: 3_600_000
   cloud:
     gateway:
       enabled: true
@@ -27,3 +23,11 @@ spring:
           uri: http://localhost:8888
           predicates:
             - /news/**
+logging:
+  level:
+    # Core Spring Security
+    org.springframework.security: TRACE
+    org.springframework.security.web: DEBUG
+    org.springframework.security.web.server: DEBUG
+    org.springframework.security.authorization: TRACE
+    org.springframework.security.authentication: DEBUG

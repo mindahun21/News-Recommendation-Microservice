@@ -1,24 +1,23 @@
 package com.ds.user_service.service;
 
-import com.ds.user_service.exceptions.UserNotFoundException;
 import com.ds.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
+public class CustomUserDetailService implements ReactiveUserDetailsService {
     private  final UserRepository repository;
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user=repository.findById(username).orElseThrow(
-                ()->new UserNotFoundException(String.format("Couldn't find user with the id %s",username)));
 
-        return org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().toArray(new String[0])).build();
+    @Override
+    public Mono<UserDetails> findByUsername(String username) {
+        return repository
+                .findById(username)
+                .map(user-> User.withUsername(user.getUsername())
+                        .password(user.getPassword())
+                        .roles(user.getRole().toArray(new String[0]))
+                        .build());
     }
 }

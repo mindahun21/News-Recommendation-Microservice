@@ -3,13 +3,13 @@ package com.ds.user_service.controller;
 import com.ds.user_service.model.dto.UserRequest;
 import com.ds.user_service.model.dto.UserResponse;
 import com.ds.user_service.service.AuthService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 @RestController
@@ -19,7 +19,7 @@ import java.util.Map;
 public class UserController {
     private final AuthService authService;
     @PostMapping
-    ResponseEntity<UserResponse> createUser(
+    ResponseEntity<Mono<UserResponse>> createUser(
             @RequestBody UserRequest user
     ){
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.createUser(user));
@@ -34,10 +34,9 @@ public class UserController {
     }
     @PostMapping("/login")
     ResponseEntity<Map<String,String>> authenticate(
-            @RequestBody UserRequest u,
-            HttpServletResponse response
+            @RequestBody UserRequest u
     ){
-        return ResponseEntity.ok(authService.authenticate(response,u));
+        return ResponseEntity.ok(authService.authenticate(u));
     }
     @ExceptionHandler(BadCredentialsException.class)
     ResponseEntity<?> handleUnauthenticated(){
