@@ -14,7 +14,7 @@ spring:
   jwt:
     secret: ${jwt_secret}
     expiration: 2_592_000_000 #30Days
-    accessExpiration: 3_600_000 # 1 hour
+    jwt-access-expiration: 3_600_000
   cloud:
     gateway:
       enabled: true
@@ -23,3 +23,11 @@ spring:
           uri: http://localhost:8888
           predicates:
             - /news/**
+logging:
+  level:
+    # Core Spring Security
+    org.springframework.security: TRACE
+    org.springframework.security.web: DEBUG
+    org.springframework.security.web.server: DEBUG
+    org.springframework.security.authorization: TRACE
+    org.springframework.security.authentication: DEBUG
