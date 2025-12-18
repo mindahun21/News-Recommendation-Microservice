@@ -27,7 +27,10 @@ management:
       probability: 1.0 # Trace 100% of requests (for debugging)
 
 fetcher:
-  topic: news-raw
+  topic: raw-news
+
+server:
+  port: 8082
 
 news:
   providers:
@@ -43,12 +46,12 @@ news:
 #          url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
 #        - category: "News Front Page"
 #          url: "https://feeds.bbci.co.uk/news/rss.xml"
-        - category: "World"
-          url: "https://feeds.bbci.co.uk/news/world/rss.xml"
+#        - category: "World"
+#          url: "https://feeds.bbci.co.uk/news/world/rss.xml"
 #        - category: "UK"
 #          url: "https://feeds.bbci.co.uk/news/uk/rss.xml"
-#        - category: "Health"
-#          url: "https://feeds.bbci.co.uk/news/health/rss.xml"
+        - category: "Health"
+          url: "https://feeds.bbci.co.uk/news/health/rss.xml"
 #        - category: "Education"
 #          url: "https://feeds.bbci.co.uk/news/education/rss.xml"
 #        - category: "Science and Environment"

@@ -27,6 +27,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: newsadmin
       MONGO_INITDB_ROOT_PASSWORD: newspass
+      MONGO_INITDB_DATABASE: news
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0

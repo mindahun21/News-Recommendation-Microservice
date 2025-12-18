@@ -19,7 +19,7 @@ public class FetcherService {
     private final KafkaSender<String, RawNewsPayload> kafkaSender;
     private final DeduplicationService deduplicationService;
 
-    @Value("raw-news")
+    @Value("${fetcher.topic}")
     private String topic;
 
     public Mono<Void> fetchAll() {
