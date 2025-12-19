@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RecommendationEvent",
+  "description": "Schema for events published by the recommendation service",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Unique event ID"
+    },
+    "eventType": {
+      "type": "string",
+      "enum": ["RECOMMENDATION_GENERATED", "RECOMMENDATION_CLICKED"],
+      "description": "Type of recommendation event"
+    },
+    "userId": {
+      "type": "string",
+      "description": "Target user ID"
+    },
+    "recommendedArticles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "articleId": { "type": "string" },
+          "score": { "type": "number" },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "List of recommended articles (for GENERATED events)"
+    },
+    "clickedArticleId": {
+      "type": "string",
+      "description": "ID of the clicked article (for CLICKED events)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "userId",
+    "timestamp"
+  ]
+}

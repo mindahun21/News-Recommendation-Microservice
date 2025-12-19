@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RawNewsPayload",
+  "description": "Kafka event payload produced by news-fetcher and consumed by news service",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "description": "Name of the news provider (e.g., BBC)"
+    },
+    "externalId": {
+      "type": "string",
+      "description": "Optional external ID from the provider"
+    },
+    "title": {
+      "type": "string",
+      "description": "News headline"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief summary of the news"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full content or main text of the news"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author of the news article"
+    },
+    "category": {
+      "type": "string",
+      "description": "News category (e.g., Technology, Business)"
+    },
+    "sourceUrl": {
+      "type": "string",
+      "description": "URL to the original article"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the article was published"
+    },
+    "fetchedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the article was fetched"
+    },
+    "dedupKey": {
+      "type": "string",
+      "description": "Unique key for deduplication"
+    }
+  },
+  "required": [
+    "provider",
+    "title",
+    "sourceUrl",
+    "fetchedAt"
+  ]
+}

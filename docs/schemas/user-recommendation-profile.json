@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserRecommendationProfile",
+  "description": "Schema for user profile data shared with recommendation service",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string",
+      "description": "Unique user identifier"
+    },
+    "username": {
+      "type": "string",
+      "description": "User login name"
+    },
+    "preferences": {
+      "type": "object",
+      "description": "User preferences (categories, topics)",
+      "properties": {
+        "preferredCategories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of preferred news categories"
+        },
+        "blockedSources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of blocked news providers"
+        }
+      }
+    },
+    "demographics": {
+      "type": "object",
+      "description": "User demographics",
+      "properties": {
+        "ageRange": { "type": "string", "enum": ["18-24", "25-34", "35-44", "45-54", "55+"] },
+        "location": { "type": "string", "description": "ISO country code" }
+      }
+    },
+    "engagementMetrics": {
+      "type": "object",
+      "description": "Computed metrics from analytics",
+      "properties": {
+        "lastActive": { "type": "string", "format": "date-time" },
+        "averageReadTimeSeconds": { "type": "number" },
+        "totalArticlesRead": { "type": "integer" }
+      }
+    }
+  },
+  "required": [
+    "userId",
+    "username"
+  ]
+}

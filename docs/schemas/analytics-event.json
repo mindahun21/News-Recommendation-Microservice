@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AnalyticsEvent",
+  "description": "Schema for analytics events published by analytics-service",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "description": "Unique event ID"
+    },
+    "eventType": {
+      "type": "string",
+      "enum": ["USER_ENGAGEMENT", "SYSTEM_METRIC"],
+      "description": "Type of analytics event"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "engagement": {
+      "type": "object",
+      "description": "Data for USER_ENGAGEMENT events",
+      "properties": {
+        "userId": { "type": "string" },
+        "resourceId": { "type": "string" },
+        "action": { "type": "string", "enum": ["VIEW", "CLICK", "SHARE", "LIKE"] },
+        "durationSeconds": { "type": "integer" }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "description": "Data for SYSTEM_METRIC events",
+      "properties": {
+        "metricName": { "type": "string" },
+        "value": { "type": "number" },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "timestamp"
+  ]
+}

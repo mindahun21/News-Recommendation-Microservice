@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UserSchema",
+  "description": "PostgreSQL schema for the users table in user-service",
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string",
+      "maxLength": 50,
+      "description": "Primary Key. Unique username."
+    },
+    "password": {
+      "type": "string",
+      "description": "Encrypted password"
+    },
+    "role": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of roles assigned to the user"
+    }
+  },
+  "required": [
+    "username"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NewsDocument",
+  "description": "Mongo document schema for persisted news in news service",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "MongoDB Document ID"
+    },
+    "provider": {
+      "type": "string",
+      "description": "Name of the news provider"
+    },
+    "externalId": {
+      "type": "string",
+      "description": "Optional external ID"
+    },
+    "title": {
+      "type": "string",
+      "description": "News headline"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief summary"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full content"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category"
+    },
+    "sourceUrl": {
+      "type": "string",
+      "description": "Original URL"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Publication timestamp"
+    },
+    "fetchedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fetch timestamp"
+    },
+    "dedupKey": {
+      "type": "string",
+      "description": "Deduplication key"
+    },
+    "language": {
+      "type": "string",
+      "description": "Detected language of the content (e.g., 'en')"
+    }
+  },
+  "required": [
+    "id",
+    "provider",
+    "title",
+    "sourceUrl",
+    "fetchedAt"
+  ]
+}
