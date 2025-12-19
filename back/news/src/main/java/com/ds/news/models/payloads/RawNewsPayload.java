@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 
 @Data
-@Document(collation = "news")
+@Document(collection = "news")
 public class RawNewsPayload {
     @Id
     private String id;

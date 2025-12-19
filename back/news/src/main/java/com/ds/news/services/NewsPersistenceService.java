@@ -14,7 +14,7 @@ public class NewsPersistenceService {
     private final NewsRepository newsRepository;
 
     public Mono<RawNewsPayload> persistAndEnrich(RawNewsPayload payload) {
-        payload.setLanguage(detectLanguage(payload.getContent()));
+        payload.setLanguage(detectLanguage(payload.getTitle()));
 
         return newsRepository.save(payload)
                 .doOnSuccess(saved -> log.info("News persisted successfully {}", saved))
