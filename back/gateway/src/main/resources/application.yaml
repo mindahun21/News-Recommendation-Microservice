@@ -19,13 +19,13 @@ spring:
               predicates:
                 - Path=/news/**
               filters:
-                - RewritePath=/user/(?<remaining>.*),/${remaining}
+                - RewritePath=/news/(?<remaining>.*),/${remaining}
             - id: news-fetcher
               uri: lb://NEWS-FETCHER
               predicates:
                 - Path=/fetcher/**
               filters:
-                - RewritePath=/user/(?<remaining>.*),/${remaining}
+                - RewritePath=/fetcher/(?<remaining>.*),/${remaining}
 
     discovery:
       locator:
@@ -48,8 +48,34 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8901/eureka
-
+jwt:
+  secret: ${jwt_secret}
 logging:
   level:
     org.springframework.cloud.gateway: TRACE
     org.springframework.http.server.reactive: DEBUG
+internal:
+  token: ${internaltoken:OPtionalInternalTOken}
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    persist-authorization: true
+    urls:
+      - name: user-service
+        url: /user/v3/api-docs
+
+#      - name: news-fetcher
+#        url: /fetcher/v3/api-docs
+
+      - name: news-service
+        url: /news/v3/api-docs
+
+    disable-swagger-default-url: true
+    use-root-path: true
+  override-with-generic-response: true
