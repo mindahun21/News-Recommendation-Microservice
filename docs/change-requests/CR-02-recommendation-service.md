@@ -1,13 +1,13 @@
 # Change Request: Recommendation Service
 
-| Field | Value |
-| :--- | :--- |
-| **CR ID** | CR-02 |
+| Field | Value                         |
+| :--- |:------------------------------|
+| **CR ID** | CR-02                         |
 | **Title** | Create Recommendation Service |
-| **Requested By** | mindahun21 |
-| **Assigned To** | mindahun21 |
-| **Date** | 2025-12-19 |
-| **Status** | DRAFT |
+| **Requested By** | mindahun21                    |
+| **Assigned To** | mindahun21                    |
+| **Date** | 2025-12-19                    |
+| **Status** | COMPLETED                     |
 
 ## Affected Configuration Items
 - **Service:** `recommendation-service` (New)

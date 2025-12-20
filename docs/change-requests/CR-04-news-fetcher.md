@@ -7,7 +7,7 @@
 | **Requested By** | natidev                          |
 | **Assigned To** | mindahun21,natidev               |
 | **Date** | 2025-12-19                       |
-| **Status** | DRAFT                            |
+| **Status** | COMPLETED                        |
 
 ## Affected Configuration Items
 - **Service:** `news-fetcher`
