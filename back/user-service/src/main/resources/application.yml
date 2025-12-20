@@ -31,3 +31,9 @@ logging:
     org.springframework.security.web.server: DEBUG
     org.springframework.security.authorization: TRACE
     org.springframework.security.authentication: DEBUG
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8901/eureka

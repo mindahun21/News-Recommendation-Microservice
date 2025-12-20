@@ -1,3 +1,5 @@
+server:
+  port: 8903
 spring:
   application:
     name: news-fetcher
@@ -29,9 +31,12 @@ management:
 fetcher:
   topic: raw-news
 
-server:
-  port: 8082
-
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8901/eureka
 news:
   providers:
     - name: "BBC"
