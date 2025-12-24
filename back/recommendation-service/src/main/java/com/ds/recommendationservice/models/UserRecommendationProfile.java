@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 //import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
@@ -17,10 +18,9 @@ public class UserRecommendationProfile {
 //    @Id
     private String userId;          // Unique internal identifier
 
-    private String username;        // Login name
-
     private Preferences preferences;
-
+    private float[] preferenceEmbedding;
+    private Instant embeddingUpdatedAt;
     private Demographics demographics;
 
     private EngagementMetrics engagementMetrics;
