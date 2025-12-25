@@ -1,6 +1,8 @@
 package com.ds.user_service.controller;
 
 import com.ds.user_service.model.dto.UserRequest;
+import com.ds.user_service.model.dto.UserCreateResponse;
+import com.ds.user_service.model.dto.UserRequest;
 import com.ds.user_service.model.dto.UserResponse;
 import com.ds.user_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import java.util.Map;
 public class UserController {
     private final AuthService authService;
     @PostMapping
-    Mono<ResponseEntity<UserResponse>> createUser(
+    Mono<ResponseEntity<UserCreateResponse>> createUser(
             @RequestBody UserRequest user
     ){
         return authService.createUser(user)

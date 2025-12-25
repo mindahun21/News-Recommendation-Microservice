@@ -9,6 +9,11 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 public interface UserPreferenceRepository  extends ReactiveCrudRepository<Preferences,String> {
-    @Query("SELECT * FROM preferences WHERE preferred_categories && :categories")
-    Flux<Preferences> findPreferencesByPreferredCategories(List<String> preferredCategories);
+    @Query("""
+        SELECT *
+        FROM preferences
+        WHERE LOWER(preferred_categories::text)::varchar[]
+        && LOWER(CAST(:preferredCategories AS varchar[])::text)::varchar[]
+    """)
+    Flux<Preferences> findPreferencesByPreferredCategories(String[] preferredCategories);
 }
