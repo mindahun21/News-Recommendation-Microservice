@@ -18,7 +18,7 @@ public class RecommendationCreatedEvent {
         return RecommendationCreatedEvent.builder()
                 .userId(decision.user().getUserId())
                 .newsId(decision.news().getId())
-                .score(null)
+                .score(decision.score())
                 .reason(decision.reason())
                 .timestamp(Instant.now())
                 .build();

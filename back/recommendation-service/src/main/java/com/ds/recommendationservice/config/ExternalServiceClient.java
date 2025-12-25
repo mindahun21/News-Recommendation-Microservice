@@ -1,6 +1,7 @@
 package com.ds.recommendationservice.config;
 
 import com.ds.recommendationservice.models.AiEnrichmentResult;
+import com.ds.recommendationservice.models.EnrichedNewsPayload;
 import com.ds.recommendationservice.models.UserRecommendationProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class ExternalAiClient implements ServiceToServiceClient {
+public class ExternalServiceClient implements ServiceToServiceClient {
     private final WebClient webClient;
 
     @Value("${uri.embedding_uri}")
@@ -35,7 +36,10 @@ public class ExternalAiClient implements ServiceToServiceClient {
     }
 
     @Override
-    public Flux<UserRecommendationProfile> findInterestedUsers(List<String> preferredCategories, List<String> blockedSources) {
+    public Flux<UserRecommendationProfile> findInterestedUsers(EnrichedNewsPayload news) {
+        List<String> preferredCategories = List.of(news.getCategory());
+        List<String> blockedSources = List.of(news.getProvider());
+
         return webClient.post()
                 .uri(user_service+"/users/interested")
                 .bodyValue(Map.of(

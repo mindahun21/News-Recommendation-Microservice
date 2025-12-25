@@ -42,7 +42,7 @@ public class JwtService {
                     .verifyWith(jwtSecret)
                     .build()
                     .parseClaimsJws(token);
-            return claim.getBody().getExpiration().before(new Date());
+            return claim.getBody().getExpiration().after(new Date());
         } catch (JwtException exception){
             return false;
         }

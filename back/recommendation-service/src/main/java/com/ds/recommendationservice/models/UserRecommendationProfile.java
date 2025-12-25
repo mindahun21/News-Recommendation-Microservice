@@ -23,7 +23,7 @@ public class UserRecommendationProfile {
     private Instant embeddingUpdatedAt;
     private Demographics demographics;
 
-    private EngagementMetrics engagementMetrics;
+//    private EngagementMetrics engagementMetrics;
 
     @Data
     @NoArgsConstructor
@@ -32,6 +32,7 @@ public class UserRecommendationProfile {
     public static class Preferences {
         private List<String> preferredCategories;
         private List<String> blockedSources;
+        private String userId;
     }
 
     @Data

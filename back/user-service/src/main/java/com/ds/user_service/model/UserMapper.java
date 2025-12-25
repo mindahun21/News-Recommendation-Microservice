@@ -1,5 +1,6 @@
 package com.ds.user_service.model;
 
+import com.ds.user_service.model.dto.UserCreateResponse;
 import com.ds.user_service.model.dto.UserRequest;
 import com.ds.user_service.model.dto.UserResponse;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,21 @@ public class UserMapper {
                 user.getRole()
         );
 
+    }
+
+    public static UserCreateResponse toUserCreateResponse(
+            User user,
+            Preferences preferences,
+            UserRecommendationProfile profile,
+            Demographics demographics,
+            EngagementMetrics metrics
+    ){
+        return new UserCreateResponse(
+                toUserResponse(user),
+                preferences,
+                profile,
+                demographics,
+                metrics
+        );
     }
 }

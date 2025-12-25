@@ -1,4 +1,8 @@
 package com.ds.user_service.model.dto;
 
-public class AiEnrichmentResult {
+public record AiEnrichmentResult(
+//        String summary,
+        float[] embedding,
+        String language
+) {
 }

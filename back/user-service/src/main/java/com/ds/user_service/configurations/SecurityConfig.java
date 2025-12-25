@@ -55,11 +55,16 @@ public class SecurityConfig {
                 .authenticationManager(authManager)
                 .authorizeExchange(auth->
                         auth
-                                .pathMatchers("/auth/login",
-                                        "/auth/refresh",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**").permitAll()
+                                .pathMatchers(
+                                    "/auth/login",
+                                    "/auth/refresh",
+                                    "/auth",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/v3/api-docs/**",
+                                    "/users/interested"
+                                )
+                                .permitAll()
                                 .anyExchange().authenticated()
                 )
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)

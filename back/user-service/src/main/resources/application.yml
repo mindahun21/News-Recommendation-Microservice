@@ -23,6 +23,12 @@ spring:
           uri: http://localhost:8888
           predicates:
             - /news/**
+
+
+
+uri:
+  embedding_uri: http://localhost:8999
+
 logging:
   level:
     # Core Spring Security

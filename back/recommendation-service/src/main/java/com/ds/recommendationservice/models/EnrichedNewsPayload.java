@@ -19,4 +19,7 @@ public class EnrichedNewsPayload {
     private Instant fetchedAt;
     private String dedupKey;
     private String language;
+    private String aiSummary;          // short semantic summary
+    private float[] embedding;         // vector representation
+
 }

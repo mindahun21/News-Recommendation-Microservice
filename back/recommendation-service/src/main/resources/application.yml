@@ -23,3 +23,7 @@ spring:
 news:
   enriched_news_topic: enriched_news
   recommendation_created_topic: recommendation.created
+
+uri:
+  embedding_uri: http://localhost:8999
+  user_service: http://localhost:8080
