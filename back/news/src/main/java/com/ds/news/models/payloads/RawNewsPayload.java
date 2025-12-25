@@ -21,7 +21,12 @@ public class RawNewsPayload {
     private String category;
     private String sourceUrl;
     private Instant publishedAt;
+//    TODO: add images, from rss
     private Instant fetchedAt;
     private String dedupKey;
     private String language;
+    private String aiSummary;          // short semantic summary
+    private float[] embedding;         // vector representation
+
+
 }

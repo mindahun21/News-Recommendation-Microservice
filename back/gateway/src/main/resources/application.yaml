@@ -18,19 +18,34 @@ spring:
               uri: lb://NEWS-SERVICE
               predicates:
                 - Path=/news/**
-              filters:
-                - RewritePath=/news/(?<remaining>.*),/${remaining}
+#              filters:
+#                - RewritePath=/news/(?<remaining>.*),/${remaining}
             - id: news-fetcher
               uri: lb://NEWS-FETCHER
               predicates:
                 - Path=/fetcher/**
               filters:
                 - RewritePath=/fetcher/(?<remaining>.*),/${remaining}
+            - id: recommendation-service
+              uri: lb://RECOMMENDATION-SERVICE
+              predicates:
+                - Path=/recommendations/**
+#              filters:
+#                - RewritePath=/fetcher/(?<remaining>.*),/${remaining}
+            - id: ai-service
+              uri: ${ai-service.url}
+              predicates:
+                - Path=/ai/**
+              filters:
+                - RewritePath=/ai/(?<remaining>.*),/${remaining}
 
     discovery:
       locator:
         enabled: true
         lower-case-service-id: true
+
+ai-service:
+  url: http://localhost:8999
 
 management:
   endpoints:

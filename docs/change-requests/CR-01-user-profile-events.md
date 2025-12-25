@@ -1,77 +1,45 @@
-# Change Request: User Service Profile Events Support
+# Change Request: User Service Profile Interest Support
 
 | Field | Value |
 | :--- | :--- |
 | **CR ID** | CR-01 |
-| **Title** | User Service Profile Events Support |
+| **Title** | User Service Profile Interest Support |
 | **Requested By** | mindahun21 |
 | **Assigned To** | natidev |
-| **Date** | 2025-12-19 |
+| **Date** | 2025-12-23 |
 | **Status** | DRAFT |
 
 ## Affected Configuration Items
 - **Service:** `user-service`
-- **Schema:** `UserSchema` (PostgreSQL)
-- **Interface:** Kafka Topic (New: `user-events`)
-- **Interface:** REST API (New: `/users/{userId}/profile`)
+- **Interface:** REST API (New: `/users/interested`)
 
 ## Current Baseline
-- The `user-service` currently manages user authentication and basic profile data (username, password, roles) stored in PostgreSQL.
-- It does not currently publish events or integrate with recommendation/analytics services.
+- The `user-service` currently manages user authentication and basic profile data.
+- It does not currently provide a mechanism to identify users interested in specific news content.
 
 ## Proposed Change Summary
-Extend the `user-service` to maintain a richer user profile model suitable for recommendation and analytics, publish user lifecycle events, and expose REST endpoints for profile management.
+Extend the `user-service` to provide an interface that accepts a news item and returns a list of users interested in that specific news item.
 
 ## Motivation
-To enable personalized news recommendations and user behavior analytics, downstream services need access to user profile data and real-time updates. Polling the user database is inefficient and creates tight coupling. Event-driven architecture is preferred.
+To enable personalized news recommendations, the recommendation service needs to know which users are interested in a specific piece of news.
 
 ## Scope
-1.  **Data Model:** Extend `User` entity to include fields relevant for recommendations (preferences, demographics).
-2.  **REST API:** Implement endpoints for retrieving and updating user profiles.
-3.  **Event Publishing:** Implement a Kafka producer to publish `UserCreatedEvent` and `UserUpdatedEvent`.
-4.  **Event Consumption:** Consume `recommendation-events` (e.g., `RECOMMENDATION_CLICKED`) and `analytics-events` (e.g., `USER_ENGAGEMENT`) to update user preferences dynamically.
+1.  **Interface:** Implement an interface (likely a REST endpoint) that accepts a news item and returns interested users.
 
 ## Impact Analysis
-- **user-service:** Moderate impact. Requires schema migration, new Kafka producer/consumer, and API endpoints.
-- **Downstream:** Enables `recommendation-service` and `analytics-service`.
-- **Performance:** Minimal impact on login latency; slight overhead for profile updates due to event publishing.
+- **user-service:** Requires implementation of logic to match users to news content based on preferences.
+- **Downstream:** Enables `recommendation-service` to target specific users.
 
 ## Proposed Interfaces
 
-### REST API
+### Interest Check Interface
 
-#### 1. Get User Profile
-- **Endpoint:** `GET /users/{userId}/profile`
-- **Description:** Retrieves the full user profile including preferences.
-- **Response:** JSON matching `user-recommendation-profile.json`.
-
-#### 2. Update User Profile
-- **Endpoint:** `POST /users/{userId}/profile`
-- **Description:** Updates user preferences and demographics.
-- **Request:** JSON matching `user-recommendation-profile.json` (partial updates allowed).
-- **Response:** 200 OK with updated profile.
-
-### Kafka Interfaces
-
-#### 1. Publishing (Producer)
-- **Topic:** `user-events`
-- **Events:**
-    - `USER_CREATED`: Fired when a new user registers.
-    - `USER_UPDATED`: Fired when profile is updated via REST or internal logic.
-- **Schema:** `user-recommendation-profile.json` wrapped in an event envelope.
-
-#### 2. Consuming (Consumer)
-- **Topic:** `recommendation-events`
-    - **Event Type:** `RECOMMENDATION_CLICKED`
-    - **Action:** Update user preferences (e.g., boost category weight).
-- **Topic:** `analytics-events`
-    - **Event Type:** `USER_ENGAGEMENT` (e.g., long read time)
-    - **Action:** Update user engagement metrics in profile.
-
-## Configuration Management Considerations
-- New Kafka topic `user-events` must be created.
-- New schema `user-recommendation-profile.json` must be versioned.
+#### 1. Find Interested Users
+- **Endpoint:** `POST /users/interested` (or similar internal method)
+- **Description:** Accepts a single news item and returns users interested in it.
+- **Request:** JSON representation of a single news item.
+- **Response:** List of user profiles interested in the news.
 
 ## Approval Requirements
 - Review by `user-service` lead (natidev).
-- Approval from  (natidev).
+

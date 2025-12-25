@@ -1,45 +1,45 @@
-# Configuration Items (CIs)
+# Configuration Item (CI) Register
 
-This document identifies all currently existing Configuration Items (CIs) within the News Recommendation Microservice repository.
+**Project:** News Recommendation Microservice Platform
+**Date:** 2025-12-25
 
-## Services
+## 1. Source Code CIs (Microservices)
 
-| CI Name | Type | Location | Owning Service | Control Reason | Impact of Change |
+| CI Name | Version | Owner | Category | Status | Location |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **news-fetcher** | Service | `back/news-fetcher` | news-fetcher | Core data ingestion service. | Disruption in news gathering; downstream services starve. |
-| **news** | Service | `back/news` | news | Core data persistence service. | Loss of news history; inability to serve news. |
-| **user-service** | Service | `back/user-service` | user-service | Authentication & User management. | Users cannot login or register; security risks. |
+| **user-service** | 1.0.0 | Backend Team | Service | Active | `back/user-service` |
+| **news-service** | 1.0.0 | Backend Team | Service | Active | `back/news` |
+| **news-fetcher** | 1.0.0 | Backend Team | Service | Active | `back/news-fetcher` |
+| **recommendation-service** | 1.1.0 | AI Team | Service | Active | `back/recommendation-service` |
+| **ai-service** | 1.0.0 | AI Team | Service | Active | `back/ai-service` |
+| **api-gateway** | 1.0.0 | DevOps Team | Service | Active | `back/gateway` |
+| **discovery-service** | 1.0.0 | DevOps Team | Service | Active | `back/discovery` |
+| **analytics-service** | 0.1.0 | Backend Team | Service | Planned | `back/analytics-service` |
+| **notification-service** | 0.1.0 | Backend Team | Service | Planned | `back/notification-service` |
 
-## Integration Points (Kafka)
+## 2. Infrastructure CIs
 
-| CI Name | Type | Location | Owning Service | Control Reason | Impact of Change |
+| CI Name | Version | Owner | Category | Status | Location |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **raw-news** | Kafka Topic | `docker-compose.yml` (config), `application.yml` | news-fetcher | Primary data pipeline. | Breaking contract between fetcher and news service. |
-| **user-events** | Kafka Topic | `docker-compose.yml` | user-service | User profile updates. | Downstream personalization fails. |
-| **recommendation-events** | Kafka Topic | `docker-compose.yml` | recommendation-service | Recommendation feedback loop. | Analytics and personalization degradation. |
-| **analytics-events** | Kafka Topic | `docker-compose.yml` | analytics-service | System insights. | Loss of business intelligence. |
-| **RawNewsPayload** | Event Schema | `com.ds.newsfetcher.models.payload.RawNewsPayload` | news-fetcher | Defines data structure on the wire. | Serialization/Deserialization errors; data loss. |
+| **docker-compose.yml** | 1.0 | DevOps Team | Infrastructure | Active | `docker-compose.yml` |
+| **Dockerfile (User)** | 1.0 | Backend Team | Infrastructure | Active | `back/user-service/Dockerfile` |
+| **Dockerfile (News)** | 1.0 | Backend Team | Infrastructure | Active | `back/news/Dockerfile` |
+| **Dockerfile (Gateway)** | 1.0 | DevOps Team | Infrastructure | Active | `back/gateway/Dockerfile` |
+| **Dockerfile (Discovery)** | 1.0 | DevOps Team | Infrastructure | Active | `back/discovery/Dockerfile` |
 
-## Data Persistence
+## 3. Documentation CIs
 
-| CI Name | Type | Location | Owning Service | Control Reason | Impact of Change |
+| CI Name | Version | Owner | Category | Status | Location |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **users table** | DB Schema | `V1__init_userdb.sql` | user-service | Defines user identity structure. | Database migration failures; application crash. |
-| **news collection** | DB Schema | `com.ds.news.models.payloads.RawNewsPayload` | news | Defines news document structure. | Data inconsistency; query failures. |
+| **SCM Plan** | 1.0 | SCM Manager | Document | Active | `docs/scmp.md` |
+| **Release v1.0 Notes** | 1.0 | Release Manager | Document | Released | `docker/Release_v1.0_Notes.md` |
+| **Release v1.1 Notes** | 1.1 | Release Manager | Document | Released | `docs/Release_v1.1_Notes.md` |
+| **Project README** | 1.0 | Lead Developer | Document | Active | `README.md` |
+| **Configuration Items** | 1.0 | SCM Manager | Document | Active | `docs/configuration-items.md` |
 
-## Configuration Files
+## 4. Data & Schema CIs
 
-| CI Name | Type | Location | Owning Service | Control Reason | Impact of Change |
+| CI Name | Version | Owner | Category | Status | Location |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **news-fetcher config** | Config | `back/news-fetcher/src/main/resources/application.yml` | news-fetcher | Controls connectivity & behavior. | Service connectivity failure (Kafka, Redis). |
-| **news config** | Config | `back/news/src/main/resources/application.yml` | news | Controls connectivity & behavior. | Service connectivity failure (Kafka, Mongo). |
-| **user-service config** | Config | `back/user-service/src/main/resources/application.yml` | user-service | Controls connectivity & behavior. | Service connectivity failure (DB, JWT). |
-| **docker-compose** | Infrastructure | `docker-compose.yml` | System | Defines runtime environment. | Environment startup failure; networking issues. |
-
-## Planned Change Requests
-
-| CR ID | Title | Status | Affected Services |
-| :--- | :--- | :--- | :--- |
-| **CR-01** | User Service Profile Events Support | DRAFT | user-service |
-| **CR-02** | Create Recommendation Service | DRAFT | recommendation-service |
-| **CR-03** | Create Analytics Service | DRAFT | analytics-service |
+| **User DB Schema** | 1.0 | Backend Team | Database | Active | `back/user-service/src/main/resources/db/migration` |
+| **News API Schema** | 1.0 | Backend Team | API | Active | `back/news/src/main/resources/api` |
