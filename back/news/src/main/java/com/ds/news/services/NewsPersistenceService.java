@@ -1,5 +1,6 @@
 package com.ds.news.services;
 
+import com.ds.news.ai.AiClient;
 import com.ds.news.models.payloads.RawNewsPayload;
 import com.ds.news.repositories.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +13,78 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class NewsPersistenceService {
     private final NewsRepository newsRepository;
+    private final AiClient aiClient;
 
     public Mono<RawNewsPayload> persistAndEnrich(RawNewsPayload payload) {
-        payload.setLanguage(detectLanguage(payload.getTitle()));
+        String semanticText = buildNewsSemanticText(payload);
 
-        return newsRepository.save(payload)
-                .doOnSuccess(saved -> log.info("News persisted successfully {}", saved))
-                .doOnError(err -> log.error("News persisted failed ",err));
+        return aiClient.enrich(semanticText)
+                .map(result -> {
+                    payload.setAiSummary(payload.getDescription());
+                    payload.setEmbedding(result.embedding());
+                    payload.setLanguage(result.language());
+                    return payload;
+                })
+                .flatMap(newsRepository::save)
+                .doOnSuccess(saved ->
+                        log.info("News enriched and persisted {}", saved.getId())
+                );
     }
 
     private String detectLanguage(String content) {
         if (content == null) return "unknown";
         return "en";
     }
+
+    private String buildNewsSemanticText(RawNewsPayload news) {
+        return """
+        Title: %s
+        Description: %s
+        Category: %s
+        Author: %s
+        Content: %s
+        """.formatted(
+                    safe(news.getTitle()),
+                    safe(news.getDescription()),
+                    safe(news.getCategory()),
+                    safe(news.getAuthor()),
+                    safe(news.getContent())
+            );
+    }
+
+    private String safe(String value) {
+        return value == null ? "" : value;
+    }
 }
+
+/*
+*  TODO: for user service
+* private String buildUserPreferenceText(UserRecommendationProfile user) {
+    return """
+    Interested in: %s
+    """.formatted(
+        String.join(", ", user.getPreferences().getPreferredCategories())
+    );
+*@Service
+@RequiredArgsConstructor
+public class UserEmbeddingService {
+
+    private final AiClient aiClient;
+    private final UserRepository userRepository;
+
+    public Mono<UserRecommendationProfile> updateEmbedding(
+            UserRecommendationProfile user) {
+
+        String text = buildUserPreferenceText(user);
+
+        return aiClient.enrich(text)
+            .map(result -> {
+                user.setPreferenceEmbedding(result.embedding());
+                user.setEmbeddingUpdatedAt(Instant.now());
+                return user;
+            })
+            .flatMap(userRepository::save);
+    }
+}
+
+}*/
