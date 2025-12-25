@@ -19,10 +19,13 @@ import java.util.Map;
 public class UserController {
     private final AuthService authService;
     @PostMapping
-    ResponseEntity<Mono<UserResponse>> createUser(
+    Mono<ResponseEntity<UserResponse>> createUser(
             @RequestBody UserRequest user
     ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.createUser(user));
+        return authService.createUser(user)
+                .map(r->ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .body(r));
     }
     
     @GetMapping("/refresh")
@@ -38,5 +41,4 @@ public class UserController {
     ){
         return ResponseEntity.ok(authService.authenticate(u));
     }
-
 }
