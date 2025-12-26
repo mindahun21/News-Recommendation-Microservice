@@ -83,10 +83,14 @@ services:
     build: ./back/user-service
     depends_on:
       - discovery
+      - postgres
+    networks:
+      - ms-net
     environment:
-      - jwt_secret=jwt_secret
-      - PG_DATABASE_URL=r2dbc:postgresql://postgres:5499/auth
+      - jwt_secret=${jwt_secret}
+      - PG_DATABASE_URL=r2dbc:postgresql://postgres:5432/auth
       - DEFAULT_ZONE=http://discovery:8901/eureka
+      - FLYWAY_DB_URL=jdbc:postgresql://postgres:5432/auth
 
   news-service:
     build: ./back/news

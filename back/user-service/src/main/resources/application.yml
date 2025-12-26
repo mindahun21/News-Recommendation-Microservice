@@ -10,7 +10,7 @@ spring:
     enabled: true
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
-    url: jdbc:postgresql://localhost:5499/auth
+    url: ${FLYWAY_DB_URL:jdbc:postgresql://localhost:5499/auth}
   jwt:
     secret: ${jwt_secret}
     expiration: 2_592_000_000 #30Days
