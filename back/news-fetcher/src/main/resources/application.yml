@@ -4,7 +4,7 @@ spring:
   application:
     name: news-fetcher
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: localhost:29092 #TODO
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
