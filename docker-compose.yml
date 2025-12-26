@@ -61,10 +61,46 @@ services:
     ports:
       - "26379:6379"
     command: ["redis-server", "--appendonly", "no"]
+  discovery:
+    build: ./back/discovery
+    networks:
+      - ms-net
+    environment:
+      EUREKA_HOST: "discovery"
+  gateway:
+    build: ./back/gateway
+    depends_on:
+      - discovery
+    networks:
+      - ms-net
+    environment:
+      - EUREKA_HOST=discovery
+      - DEFAULT_ZONE=http://discovery:8901/eureka
+      - jwt_secret=${jwt_secret}
+    ports:
+      - 7000:8900
+  user-service:
+    build: ./back/user-service
+    depends_on:
+      - discovery
+    environment:
+      - jwt_secret=${jwt_secret}
+      -
 
+  news-service:
+    build: ./back/news
+    depends_on:
+      - discovery
+  news-fetcher-service:
+    build: ./back/news-fetcher
+    depends_on:
+      - discovery
+  recommendation-service:
+    build: ./back/recommendation-service
 networks:
   ms-net:
     driver: bridge
+
 volumes:
   postgres:
     driver: local
