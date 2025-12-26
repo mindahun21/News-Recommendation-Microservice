@@ -45,7 +45,7 @@ spring:
         lower-case-service-id: true
 
 ai-service:
-  url: http://localhost:8999
+  url: ${AI_SERVICE_URL:http://localhost:8999}
 
 management:
   endpoints:
@@ -59,10 +59,10 @@ management:
       show-details: always
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_HOST:localhost}
   client:
     service-url:
-      defaultZone: http://localhost:8901/eureka
+      defaultZone: ${DEFAULT_ZONE:http://localhost:8901/eureka}
 jwt:
   secret: ${jwt_secret}
 logging:
@@ -85,10 +85,13 @@ springdoc:
       - name: user-service
         url: /user/v3/api-docs
 
-#      - name: news-fetcher
-#        url: /fetcher/v3/api-docs
+      - name: news-fetcher
+        url: /fetcher/v3/api-docs
 
       - name: news-service
+        url: /news/v3/api-docs
+
+      - name: recommendation-service
         url: /news/v3/api-docs
 
     disable-swagger-default-url: true

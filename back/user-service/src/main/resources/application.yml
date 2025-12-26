@@ -4,30 +4,20 @@ spring:
   r2dbc:
     username: pguser
     password: pgpassword
-    url: r2dbc:postgresql://localhost:5499/auth
+    url: ${PG_DATABASE_URL:r2dbc:postgresql://localhost:5499/auth}
   flyway:
     baseline-on-migrate: true
     enabled: true
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
-    url: jdbc:postgresql://localhost:5499/auth
+    url: ${FLYWAY_DB_URL:jdbc:postgresql://localhost:5499/auth}
   jwt:
     secret: ${jwt_secret}
     expiration: 2_592_000_000 #30Days
     jwt-access-expiration: 3_600_000
-  cloud:
-    gateway:
-      enabled: true
-      routes:
-        - id : NEWS-SERVICE
-          uri: http://localhost:8888
-          predicates:
-            - /news/**
-
-
 
 uri:
-  embedding_uri: http://localhost:8999
+  embedding_uri: http://localhost:8999 #TODO
 
 logging:
   level:
@@ -39,7 +29,7 @@ logging:
     org.springframework.security.authentication: DEBUG
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_HOST:localhost}
   client:
     service-url:
-      defaultZone: http://localhost:8901/eureka
+      defaultZone: ${DEFAULT_ZONE:http://localhost:8901/eureka}

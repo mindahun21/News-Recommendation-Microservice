@@ -4,7 +4,7 @@ spring:
   application:
     name: news-fetcher
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${KAFKA_SERVER:localhost:29092} #TODO
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -15,10 +15,9 @@ spring:
       spring.json.trusted.packages: "*"
   data:
     redis:
-      host: localhost
-      port: 26379
-
-
+#      host: ${REDIS_HOST:localhost}
+#      port: ${REDIS_PORT:26379}
+      url: ${REDIS_URL:redis://localhost:26379/0}
 management:
   endpoints:
     web:
@@ -33,10 +32,10 @@ fetcher:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_HOST:localhost}
   client:
     service-url:
-      defaultZone: http://localhost:8901/eureka
+      defaultZone: ${DEFAULT_ZONE:http://localhost:8901/eureka}
 news:
   providers:
     - name: "BBC"

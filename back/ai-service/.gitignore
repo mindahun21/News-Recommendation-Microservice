@@ -1,1 +1,9 @@
 /venv
+.gitignore
+Dockerfile
+.dockerignore
+*.pyc
+*.pyo
+*.pyd
+.db
+.sqlite3

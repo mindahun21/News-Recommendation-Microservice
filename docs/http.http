@@ -1,0 +1,33 @@
+@token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYW1fc2Npd3JlbmNlIiwiaWF0IjoxNzY2NzQ2MzE1LCJleHAiOjE3NjY3NDk5MTV9.nvuB-2bTr-SoSXXCZRYhmWYksuonKjTBIEevVt2ceGBGQXQQXdJNToT0CH80Y-lSbd8hdfo0XrnrHZR0arLUuQ
+###
+POST http://localhost:7000/user/auth
+Content-Type: application/json
+
+{
+  "username": "sam_sciwrence",
+  "password": "S74cience!"
+}
+
+###
+PATCH http://localhost:7000/user/users/sam_science
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "location": "hawassa",
+  "ageRange": "25-35",
+  "preferredCategories": ["science and environment", "health", "technology"],
+  "blockedSources": ["foxnews"]
+}
+###
+POST http://localhost:7000/user/auth/login
+Content-Type: application/json
+
+{
+"username": "sam_sciwrence",
+"password": "S74cience!"
+}
+
+###
+POST http://localhost:7000/recommendations/sam_sciwrence
+Content-Type: application/json

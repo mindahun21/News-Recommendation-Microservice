@@ -33,6 +33,8 @@ services:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
     hostname: kafka
+    networks:
+      - ms-net
     ports:
       - "29092:29092"
     environment:
@@ -41,10 +43,10 @@ services:
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
 
-      # ---- LISTENERS ----
-      KAFKA_LISTENERS: "CONTROLLER://kafka:9093,PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092"
 
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"
+      KAFKA_LISTENERS: "CONTROLLER://kafka:9093,PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092"
+
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092"
 
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
 
@@ -58,13 +60,91 @@ services:
   redis:
     image: redis:7.2
     container_name: redis
+    networks:
+      - ms-net
     ports:
       - "26379:6379"
     command: ["redis-server", "--appendonly", "no"]
+  discovery:
+    build: ./back/discovery
+    networks:
+      - ms-net
+    environment:
+      EUREKA_HOST: "discovery"
+  gateway:
+    build: ./back/gateway
+    depends_on:
+      - discovery
+    networks:
+      - ms-net
+    environment:
+      - EUREKA_HOST=gateway
+      - DEFAULT_ZONE=http://discovery:8901/eureka
+      - jwt_secret=${jwt_secret}
+      - AI_SERVICE_URL=http://ai-service:8999
+    ports:
+      - 7000:8900
+  user-service:
+    build: ./back/user-service
+    depends_on:
+      - discovery
+      - postgres
+    networks:
+      - ms-net
+    environment:
+      - EUREKA_HOST=user-service
+      - jwt_secret=${jwt_secret}
+      - PG_DATABASE_URL=r2dbc:postgresql://postgres:5432/auth
+      - DEFAULT_ZONE=http://discovery:8901/eureka
+      - FLYWAY_DB_URL=jdbc:postgresql://postgres:5432/auth
 
+  news-service:
+    build: ./back/news
+    networks:
+      - ms-net
+    depends_on:
+      - discovery
+      - mongodb
+      - kafka
+    environment:
+      DEFAULT_ZONE: http://discovery:8901/eureka
+      EUREKA_HOST: news-service
+      KAFKA_SERVER: http://kafka:29092
+      MONGODB_URL: mongodb://newsadmin:newspass@mongodb:27017/news?authSource=admin
+      EMBEDDING_URI: http//ai-service:8999
+  ai-service:
+    build: ./back/ai-service
+  news-fetcher-service:
+    build: ./back/news-fetcher
+    networks:
+      - ms-net
+    depends_on:
+      - discovery
+      - redis
+    environment:
+      DEFAULT_ZONE: http://discovery:8901/eureka
+      EUREKA_HOST: news-fetcher-service
+      KAFKA_SERVER: kafka:29092
+      REDIS_URL: redis://redis:6379/0
+  recommendation-service:
+    build: ./back/recommendation-service
+    depends_on:
+      - ai-service
+      - user-service
+      - kafka
+      - discovery
+    networks:
+      - ms-net
+    environment:
+      DEFAULT_ZONE: http://discovery:8901/eureka
+      KAFKA_SERVER: kafka:29092
+      EMBEDDING_URI: http//ai-service:8999
+      USER_SERVICE_URL: http://user-service:8080
+      EUREKA_HOST:  recommendation-service
 networks:
   ms-net:
     driver: bridge
+
 volumes:
   postgres:
     driver: local
