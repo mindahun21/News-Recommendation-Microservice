@@ -1,0 +1,71 @@
+services:
+  postgres:
+    container_name: user_db
+    image: postgres
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: auth
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8 --lc-collate=C --lc-ctype=C'
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    ports:
+      - "5499:5432"
+    networks:
+      - ms-net
+    restart: unless-stopped
+
+  mongodb:
+    container_name: news_db
+    image: mongo
+    ports:
+      - "5060:27017"
+    volumes:
+      - mongo:/data/db
+    networks:
+      - ms-net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: newsadmin
+      MONGO_INITDB_ROOT_PASSWORD: newspass
+      MONGO_INITDB_DATABASE: news
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "29092:29092"
+    environment:
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+
+      # ---- LISTENERS ----
+      KAFKA_LISTENERS: "CONTROLLER://kafka:9093,PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092"
+
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "26379:6379"
+    command: ["redis-server", "--appendonly", "no"]
+
+networks:
+  ms-net:
+    driver: bridge
+volumes:
+  postgres:
+    driver: local
+  mongo:
