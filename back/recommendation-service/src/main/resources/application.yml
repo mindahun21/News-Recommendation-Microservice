@@ -32,3 +32,4 @@ news:
 uri:
   embedding_uri: ${EMBEDDING_URI:http://localhost:8999}
   user_service: ${USER_SERVICE_URL:http://localhost:8080}
+  news_service: ${NEWS_SERVICE:http://localhost:8902}
