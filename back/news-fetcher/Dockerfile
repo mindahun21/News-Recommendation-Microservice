@@ -12,10 +12,10 @@ RUN ./mvnw dependency:go-offline -B
 COPY src src
 RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 WORKDIR /app
-RUN apk add --no-cache libgcc libstdc++
-RUN addgroup -S spring && adduser -S spring -G spring
+
+RUN groupadd -r spring && useradd -r -g spring spring
 
 COPY --from=builder /build/target/*.jar app.jar
 

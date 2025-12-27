@@ -18,8 +18,8 @@ spring:
               uri: lb://NEWS-SERVICE
               predicates:
                 - Path=/news/**
-#              filters:
-#                - RewritePath=/news/(?<remaining>.*),/${remaining}
+              filters:
+                - RewritePath=/news/(?<remaining>.*),/${remaining}
             - id: news-fetcher
               uri: lb://NEWS-FETCHER
               predicates:
@@ -30,8 +30,8 @@ spring:
               uri: lb://RECOMMENDATION-SERVICE
               predicates:
                 - Path=/recommendations/**
-#              filters:
-#                - RewritePath=/fetcher/(?<remaining>.*),/${remaining}
+              filters:
+                - RewritePath=/recommendations/(?<remaining>.*),/${remaining}
             - id: ai-service
               uri: ${ai-service.url}
               predicates:
@@ -92,7 +92,7 @@ springdoc:
         url: /news/v3/api-docs
 
       - name: recommendation-service
-        url: /news/v3/api-docs
+        url: /recommendations/v3/api-docs
 
     disable-swagger-default-url: true
     use-root-path: true
