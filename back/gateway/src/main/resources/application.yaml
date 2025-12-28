@@ -94,6 +94,9 @@ springdoc:
       - name: recommendation-service
         url: /recommendations/v3/api-docs
 
+      - name: ai-service
+        url: /ai/openapi.json
+
     disable-swagger-default-url: true
     use-root-path: true
   override-with-generic-response: true
