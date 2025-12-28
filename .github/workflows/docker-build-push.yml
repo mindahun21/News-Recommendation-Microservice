@@ -1,0 +1,116 @@
+name: build and push docker images
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v4
+
+      - name: setup docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      #      - name: build and push config server
+      #        uses: docker/build-push-action@v5
+      #        with:
+      #          context: ./back/config-server
+      #          push: true
+      #          tags: |
+      #            ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest
+      #            ${{ secrets.DOCKERHUB_USERNAME }}/config-server:${{ github.sha }}
+
+      # - name: build and push nginx
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./nginx
+      #     push: true
+      #     tags: |
+      #       ${{ secrets.DOCKERHUB_USERNAME }}/nginx-service:latest
+      #       ${{ secrets.DOCKERHUB_USERNAME }}/nginx-service:${{ github.sha }}
+
+      - name: build and push discovery service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/discovery
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/discovery-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/discovery-service:${{ github.sha }}
+
+      - name: build and push gateway service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/gateway
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/gateway-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/gateway-service:${{ github.sha }}
+
+      - name: build and push news service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/news
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-service:${{ github.sha }}
+
+      - name: build and push news fetcher service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/news-fetcher
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-fetcher-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-fetcher-service:${{ github.sha }}
+
+      - name: build and push recommendation service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/recommendation-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/recommendation-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/recommendation-service:${{ github.sha }}
+
+      - name: build and push user service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/user-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/user-service:${{ github.sha }}
+
+      - name: build and push analytics service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/analytics-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/analytics-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/analytics-service:${{ github.sha }}
+
+      - name: build and push ai service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./back/ai-service
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/ai-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/ai-service:${{ github.sha }}
