@@ -1,3 +1,7 @@
+logging:
+  level:
+    org.springframework.core.env: DEBUG
+    org.springframework.boot.context.config: DEBUG
 spring:
   application:
     name: user-service
