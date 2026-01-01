@@ -21,11 +21,11 @@ spring:
     uri: ${MONGODB_URL:mongodb://newsadmin:newspass@localhost:5060/news?authSource=admin}
 
 news:
-  topic: raw-news
-  enriched_news_topic: enriched_news
+  topic: news.fetched
+  enriched_news_topic: news.enriched
 
 ai:
-  embedding_uri: ${EMBEDDING_URI:http//localhost:8999}
+  embedding_uri: ${EMBEDDING_URI:http://localhost:8999}
 
 server:
   port: 8902

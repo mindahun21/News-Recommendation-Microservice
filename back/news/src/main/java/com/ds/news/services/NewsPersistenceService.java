@@ -31,11 +31,6 @@ public class NewsPersistenceService {
                 );
     }
 
-    private String detectLanguage(String content) {
-        if (content == null) return "unknown";
-        return "en";
-    }
-
     private String buildNewsSemanticText(RawNewsPayload news) {
         return """
         Title: %s
@@ -56,35 +51,3 @@ public class NewsPersistenceService {
         return value == null ? "" : value;
     }
 }
-
-/*
-*  TODO: for user service
-* private String buildUserPreferenceText(UserRecommendationProfile user) {
-    return """
-    Interested in: %s
-    """.formatted(
-        String.join(", ", user.getPreferences().getPreferredCategories())
-    );
-*@Service
-@RequiredArgsConstructor
-public class UserEmbeddingService {
-
-    private final AiClient aiClient;
-    private final UserRepository userRepository;
-
-    public Mono<UserRecommendationProfile> updateEmbedding(
-            UserRecommendationProfile user) {
-
-        String text = buildUserPreferenceText(user);
-
-        return aiClient.enrich(text)
-            .map(result -> {
-                user.setPreferenceEmbedding(result.embedding());
-                user.setEmbeddingUpdatedAt(Instant.now());
-                return user;
-            })
-            .flatMap(userRepository::save);
-    }
-}
-
-}*/
