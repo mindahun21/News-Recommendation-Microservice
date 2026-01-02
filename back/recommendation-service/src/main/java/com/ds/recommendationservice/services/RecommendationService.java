@@ -27,6 +27,7 @@ public class RecommendationService {
     private final RecommendationStore recommendationStore;
     private final KafkaSender<String, RecommendationCreatedEvent> kafkaSender;
     private final ServiceToServiceClient  serviceToServiceClient;
+    private final EmailService emailService;
 
     @Value("${news.recommendation_created_topic}")
     private String newsRecommendationCreatedTopic;
@@ -39,7 +40,7 @@ public class RecommendationService {
                                 .filter(Decision::isRelevant)
                                 .flatMap(decision ->
                                         recommendationStore.saveToRedis(decision)
-                                                .then(publish(decision))
+                                                .then(emailService.sendNewsRecommendation(user,news,user.getUserId()+"@gmail.com"))
                                 )
                 )
                 .then();
