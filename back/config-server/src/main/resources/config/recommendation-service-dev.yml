@@ -1,4 +1,13 @@
 spring:
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
   kafka:
     bootstrap-servers: ${KAFKA_SERVER:localhost:29092}
     producer:
@@ -22,7 +31,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8901/eureka
 news:
-  enriched_news_topic: enriched_news
+  enriched_news_topic: news.enriched
   recommendation_created_topic: recommendation.created
 
 uri:

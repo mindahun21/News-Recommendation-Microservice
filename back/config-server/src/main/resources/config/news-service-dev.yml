@@ -20,8 +20,8 @@ spring:
   mongodb:
     uri: mongodb://newsadmin:newspass@localhost:5060/news?authSource=admin
 news:
-  topic: raw-news
-  enriched_news_topic: enriched_news
+  topic: news.fetched
+  enriched_news_topic: news.enriched
 
 ai:
   embedding_uri: http//localhost:8999

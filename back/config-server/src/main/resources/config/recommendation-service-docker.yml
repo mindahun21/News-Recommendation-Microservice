@@ -1,6 +1,15 @@
 spring:
   application:
     name: recommendation-service
+  mail:
+    host: ${MAILDEV_HOST}
+    port: ${MAILDEV_PORT}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}
     producer:

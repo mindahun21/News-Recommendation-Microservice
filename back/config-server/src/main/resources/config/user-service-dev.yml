@@ -7,6 +7,26 @@ spring:
     user: pguser
     password: pgpassword
     url: jdbc:postgresql://localhost:5499/auth
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+    consumer:
+      group-id: user-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: "com.ds.user_service.model.dto.analytics.AnalyticsEvent"
+        spring.json.use.type.headers: false
+
+analytics:
+  category_topic: analytics.category
+  source_topic: analytics.source
 jwt:
   secret: ${JWT_SECRET}
 
