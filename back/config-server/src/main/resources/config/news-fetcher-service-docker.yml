@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: news-fetcher-service
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER} #TODO
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+    properties:
+      max.in.flight.requests.per.connection: 1
+      spring.json.trusted.packages: "*"
+  data:
+    redis:
+      #      host: ${REDIS_HOST:localhost}
+      #      port: ${REDIS_PORT:26379}
+      url: ${REDIS_URL}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,prometheus"
+  tracing:
+    sampling:
+      probability: 1.0 # Trace 100% of requests (for debugging)
+
+fetcher:
+  topic: raw-news
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST}
+  client:
+    service-url:
+      defaultZone: ${DEFAULT_ZONE}
+news:
+  providers:
+    - name: "BBC"
+      type: RSS
+      apiKeyNeeded: false
+      apiKey: ""
+      rateLimitPerSecond: 5
+      feeds:
+        #        - category: "Business"
+        #          url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+        #        - category: "Politics"
+        #          url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
+        #        - category: "News Front Page"
+        #          url: "https://feeds.bbci.co.uk/news/rss.xml"
+        #        - category: "World"
+        #          url: "https://feeds.bbci.co.uk/news/world/rss.xml"
+        - category: "UK"
+          url: "https://feeds.bbci.co.uk/news/uk/rss.xml"
+#        - category: "Health"
+#          url: "https://feeds.bbci.co.uk/news/health/rss.xml"
+#        - category: "Education"
+#          url: "https://feeds.bbci.co.uk/news/education/rss.xml"
+#        - category: "Science and Environment"
+#          url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"
+#        - category: "Technology"
+#          url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
+#        - category: "Entertainment and Arts"
+#          url: "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml"
+#        - category: "Africa"
+#          url: "https://feeds.bbci.co.uk/news/world/africa/rss.xml"
+#        - category: "Asia"
+#          url: "https://feeds.bbci.co.uk/news/world/asia/rss.xml"
+#        - category: "Europe"
+#          url: "https://feeds.bbci.co.uk/news/world/europe/rss.xml"
+#        - category: "Latin America"
+#          url: "https://feeds.bbci.co.uk/news/world/latin_america/rss.xml"
+#        - category: "Middle East"
+#          url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml"
+#        - category: "Us and Canada"
+#          url: "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml"
+#        - category: "England"
+#          url: "https://feeds.bbci.co.uk/news/england/rss.xml"
+#        - category: "Northern Ireland"
+#          url: "https://feeds.bbci.co.uk/news/northern_ireland/rss.xml"
+#        - category: "Scotland"
+#          url: "https://feeds.bbci.co.uk/news/scotland/rss.xml"
+#        - category: "Wales"
+#          url: "https://feeds.bbci.co.uk/news/wales/rss.xml"
